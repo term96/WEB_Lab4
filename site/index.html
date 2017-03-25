@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Drawing with JS</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script defer src="js/scripts.js"></script>
+  </head>
+  <body>
+    <div>
+      <label>ShapeЫРФЗУ:
+        <select id="shape_selecter">
+          <option disabled selected>Choose...</option>
+          <option value="Circle">Circle</option>
+          <option value="Rectangle">Rectangle</option>
+          <option value="Triangle">Triangle</option>
+        </select>
+      </label>
+      <div id="shape_colors">
+        <label>Fill color: <input id="fill_color" placeholder="#000000"></label>
+        <label>Border color: <input id="border_color" placeholder="#ff0000"></label>
+      </div>
+      <div id="circle_parameters">
+        <label>Radius: <input id="radius" placeholder="20"></label>
+        <label>Center X: <input id="center_x" placeholder="50"></label>
+        <label>Center Y: <input id="center_y" placeholder="50"></label>
+      </div>
+       <div id="rectangle_parameters">
+        <label>X1: <input id="rectangle_x1" placeholder="20"></label>
+        <label>Y1: <input id="rectangle_y1" placeholder="20"></label>
+        <label>X2: <input id="rectangle_x2" placeholder="100"></label>
+        <label>Y2: <input id="rectangle_y2" placeholder="50"></label>
+      </div>
+      <div id="triangle_parameters">
+        <label>X1: <input id="triangle_x1" placeholder="20"></label>
+        <label>Y1: <input id="triangle_y1" placeholder="20"></label>
+        <label>X2: <input id="triangle_x2" placeholder="100"></label>
+        <label>Y2: <input id="triangle_y2" placeholder="20"></label>
+        <label>X3: <input id="triangle_x3" placeholder="60"></label>
+        <label>Y3: <input id="triangle_y3" placeholder="100"></label>
+      </div>
+      <div class="shape_info">
+        <p>Area: <span id="area"></span></p>
+        <p>Perimeter: <span id="perimeter"></span></p>
+      </div>
+    </div>
+    <canvas id="canvas">
+    </canvas>
+  </body>
+</html>

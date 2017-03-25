@@ -1,0 +1,34 @@
+body
+{
+  font-size: 10pt;
+}
+
+label
+{
+  display: block;
+}
+
+#circle_parameters,
+#rectangle_parameters,
+#triangle_parameters,
+p
+{
+  display: none;
+}
+
+.shape_info
+{
+    margin: 15px 0;
+}
+
+p
+{
+    margin: 0;
+}
+
+canvas
+{
+  border: 1px solid grey;
+  width: 100%;
+  height: 100%;
+}
