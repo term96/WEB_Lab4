@@ -138,7 +138,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tslint');
-  grunt.loadNpmTasks('grunt-text-replace');
   
   grunt.registerTask('make-scripts', ['tslint', 'ts', 'babel']);
   grunt.registerTask('make-styles', ['concat:css', 'cssmin']);
