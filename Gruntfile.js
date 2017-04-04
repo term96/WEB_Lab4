@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: {
-      full: {
+      dist: {
         src: ['dist/']
       },
       build: {
@@ -16,34 +16,44 @@ module.exports = function(grunt) {
         plugins: ['transform-react-jsx'],
         presets: ['es2015', 'react']
       },
-      jsx: {
+      target: {
         files: [{
           expand: true,
           cwd: 'site/scripts/jsx', // Custom folder
-          src: ['*'],
+          src: ['app.jsx'],
           dest: 'dist/js', // Custom folder
           ext: '.js'
         }]
       }
     },
     concat: {
-      scripts: {
-        src: ['site/scripts/js/*.js'],
-        dest: 'dist/js/scripts.js'
-      },
-      react: {
-        src: ['site/scripts/react/react.js', 'site/scripts/react/react-dom.js', 'dist/js/app.js', 'dist/js/scripts.js'],
-        dest: 'dist/js/scripts.js'
-      },
       css: {
         src: ['site/css/*'],
         dest: 'dist/css/styles.css'
       }
     },
-    uglify: {
+    tslint: {
+      options: {
+          configuration: "tslint-config.json",
+      },
+      files: {
+          src: ['site/scripts/ts/*.ts']
+      }
+    },
+    ts: {
       target: {
-        src: 'dist/js/scripts.js',
-        dest: 'dist/js/scripts.js'
+        src: ['site/scripts/ts/ishape.ts', 'site/scripts/ts/shape.ts', 
+        'site/scripts/ts/circle.ts', 'site/scripts/ts/rectangle.ts', 
+        'site/scripts/ts/triangle.ts', 'site/scripts/ts/main.ts'],
+        out: 'dist/js/scripts.js',
+        options: {
+          noImplicitAny: true,
+          removeComments: true,
+          preserveConstEnums: true,
+          sourceMap: true,
+          module: 'system',
+          target: 'es5'
+        }
       }
     },
     cssmin: {
@@ -52,16 +62,12 @@ module.exports = function(grunt) {
         dest: 'dist/css/styles.css'
       }
     },
-    eslint: {
-      options: {
-        configFile: 'eslint-config.js'
-      },
-      target: ['dist/js/scripts.js']
-    },
     copy: {
       js: {
         files: [
-          {expand: true, cwd: 'dist/', src: '**/*.js', dest: '.build/'}
+          {expand: true, cwd: 'dist/js/', src: '*.js', dest: '.build/js'},
+          {expand: true, cwd: 'site/scripts/libs/', src: '*.js', dest: '.build/js'},
+          {expand: true, cwd: 'site/scripts/systemjs/', src: '*', dest: '.build/js'}
         ]
       },
       css: {
@@ -85,7 +91,7 @@ module.exports = function(grunt) {
         dest: '.build/index.html'
       },
       js: {
-        src: ['.build/js/scripts.js'],
+        src: ['.build/js/*.js'],
         dest: '.build/index.html'
       }
     },
@@ -105,23 +111,19 @@ module.exports = function(grunt) {
         livereload: true
       },
       js: {
-        files: 'site/scripts/js/*',
-        tasks: ['build-js']
-      },
-      jsx: {
-        files: 'site/scripts/jsx/*',
-        tasks: ['babel', 'build-js']
+        files: ['site/scripts/**/*'],
+        tasks: ['make-scripts', 'copy-hash']
       },
       css: {
         files: 'site/css/*',
-        tasks: ['default']
+        tasks: ['make-styles', 'copy-hash']
       },
       html: {
         files: 'site/index.html',
-        tasks: ['build-html']
+        tasks: ['copy-hash']
       },
       build: {
-        files: '.build/**/*.html'
+        files: '.build/**/*'
       }
     }
   });
@@ -129,18 +131,20 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-hashres');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-tslint');
+  grunt.loadNpmTasks('grunt-text-replace');
+  
+  grunt.registerTask('make-scripts', ['tslint', 'ts', 'babel']);
+  grunt.registerTask('make-styles', ['concat:css', 'cssmin']);
+  grunt.registerTask('copy-hash', ['clean:build', 'copy', 'hashres']);
 
-  grunt.registerTask('default', ['clean', 'babel', 'concat:scripts', 'uglify', 'concat:css', 'cssmin', 'eslint', 'concat:react', 'copy', 'hashres']);
-  grunt.registerTask('build-css', ['clean:build', 'concat:css', 'cssmin', 'copy', 'hashres']);
-  grunt.registerTask('build-js', ['clean:build', 'concat:scripts', 'uglify', 'eslint', 'concat:react', 'copy', 'hashres']);
-  grunt.registerTask('build-html', ['clean:build', 'copy', 'hashres']);
+  grunt.registerTask('default', ['clean', 'make-scripts', 'make-styles', 'copy-hash']);
   grunt.registerTask('serve', ['connect', 'watch']);
 
 };

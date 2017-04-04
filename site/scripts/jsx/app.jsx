@@ -4,7 +4,7 @@ var App = React.createClass({
     <div>
       <div>
       <label>Shape:
-        <select id="shape_selecter">
+        <select id="shape_selector">
           <option disabled defaultValue>Choose...</option>
           <option value="Circle">Circle</option>
           <option value="Rectangle">Rectangle</option>

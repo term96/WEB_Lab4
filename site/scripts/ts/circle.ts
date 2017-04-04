@@ -1,8 +1,11 @@
-function Circle(centerX, centerY, radius) {
-    Shape.apply(this);
-    this.centerX = 50;
-    this.centerY = 50;
-    this.radius = 20;
+import {Shape} from "./shape";
+
+export class Circle extends Shape {
+  protected centerX: number = 50;
+  protected centerY: number = 50;
+  protected radius: number = 20;
+  constructor(centerX: number, centerY: number, radius: number) {
+    super();
     if (centerX !== undefined && !isNaN(+centerX)) {
         this.centerX = +centerX;
     }
@@ -12,13 +15,10 @@ function Circle(centerX, centerY, radius) {
     if (radius !== undefined && !isNaN(+radius) && radius >= 0) {
         this.radius = +radius;
     }
-}
-
-Circle.prototype = Object.create(Shape.prototype);
-
-Circle.prototype.draw = function() {
-    var canvas = document.getElementById("canvas");
-    var context = canvas.getContext("2d");
+  }
+  public draw(): void {
+    let canvas = <HTMLCanvasElement> document.getElementById("canvas");
+    let context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.beginPath();
     context.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI, false);
@@ -27,12 +27,11 @@ Circle.prototype.draw = function() {
     context.lineWidth = 3;
     context.strokeStyle = this.borderColor;
     context.stroke();
-};
-
-Circle.prototype.calculateArea = function() {
+  }
+  public calculateArea(): number {
     return Math.PI * this.radius * this.radius;
-};
-
-Circle.prototype.calculatePerimeter = function() {
+  };
+  public calculatePerimeter(): number {
     return 2 * Math.PI * this.radius;
-};
+  }
+}
